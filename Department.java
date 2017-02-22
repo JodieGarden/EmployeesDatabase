@@ -1,3 +1,5 @@
+import java.sql.ResultSet;
+
 import db.SqlRunner;
 
 public class Department {
@@ -22,4 +24,24 @@ public class Department {
         SqlRunner.closeConnection();
     }
 
+    public static void showAll(){
+        String sql = String.format("SELECT * FROM departments;");
+        ResultSet rs = SqlRunner.executeQuery(sql);
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                System.out.println(id);
+                System.out.println(title);
+                System.out.println();
+            }
+        }
+        catch (Exception e){
+            System.err.println(e.getClass().getName() + " : " + e.getMessage());
+            System.exit(0);
+        }
+        finally{
+            SqlRunner.closeConnection();
+        }
+    }
 }

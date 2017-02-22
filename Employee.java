@@ -31,30 +31,58 @@ public class Employee {
     }
 
     public void save() {
-//        String sql = String.format(
-//                "INSERT INTO employees (name, salary, department) VALUES ('%s', %7.2f, %d; "
-//                , this.name, this.salary, department);
-//        this.id = SqlRunner.executeUpdate(sql);
-//        SqlRunner.closeConnection();
+        int department_id = this.department.getId();
+        String sql = String.format("INSERT INTO employees (name, department_id, salary) VALUES ('%s', %d, %7.2f);", this.name, department_id, this.salary);
+        this.id = SqlRunner.executeUpdate(sql);
+        SqlRunner.closeConnection();
     }
 
-//    public static void all(){
-//        String sql = "SELECT * FROM employees;";
-//        ResultSet rs = SqlRunner.executeQuery();
-//        try {
-//            while (rs.next()) {
-//                String name = rs.getString("name");
-//                Double salary = rs.getDouble(this.salary);
-//                System.out.println(name);
-//                System.out.println(this.salary);
-//                System.out.println();
-//            }
-//        } catch (Exception e) {
-//            System.err.println(e.getClass().getName() + " : " + e.getMessage());
-//            System.exit(0);
-//        } finally {
-//            SqlRunner.closeConnection();
-//
-//        }
-//    }
+
+
+
+    public static void all(){
+        String sql = "SELECT * FROM employees;";
+        ResultSet rs = SqlRunner.executeQuery(sql);
+        try {
+            while (rs.next()) {
+                String name = rs.getString("name");
+                Double salary = rs.getDouble("salary");
+                System.out.println(name);
+                System.out.println(salary);
+                System.out.println();
+            }
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + " : " + e.getMessage());
+            System.exit(0);
+        } finally {
+            SqlRunner.closeConnection();
+
+        }
+    }
+
+    public static void deleteAll(){
+        String sql = "DELETE FROM employees;";
+        SqlRunner.executeUpdate(sql);
+    }
+    public void getAllDetails() {
+        String sql = String.format("SELECT employees.id, employees.name, departments.title, employees.salary FROM employees JOIN departments ON departments.id = employees.department_id WHERE employees.id = %d;", this.id);
+        ResultSet rs = SqlRunner.executeQuery(sql);
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String deptTitle = rs.getString("title");
+                Double salary = rs.getDouble("salary");
+                System.out.println(id);
+                System.out.println(name);
+                System.out.println(deptTitle);
+                System.out.println(salary);
+            }
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + " : " + e.getMessage());
+            System.exit(0);
+        } finally {
+            SqlRunner.closeConnection();
+        }
+    }
 }
